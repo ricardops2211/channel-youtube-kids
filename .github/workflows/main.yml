@@ -28,5 +28,5 @@ jobs:
 
       - name: Run script to generate script ideas
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPEN_API_KEY: ${{ secrets.OPEN_API_KEY }}
         run: python generate_script_ideas.py
