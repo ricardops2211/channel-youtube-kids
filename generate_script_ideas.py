@@ -10,7 +10,7 @@ prompt = (
 )
 
 response = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-3.5-turbo",
     messages=[
         {"role": "system", "content": "Eres un guionista experto en contenido infantil."},
         {"role": "user", "content": prompt}
