@@ -5,13 +5,46 @@ on:
   repository_dispatch:
     types: [trigger-cert]
 
+permissions:
+  contents: write
+
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    outputs:
+      rc_tag: ${{ steps.set-tag.outputs.rc_tag }}
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Generar RC Tag dinámico
+        id: set-tag
+        run: |
+          DATE=$(date +'%Y%m%d')
+          RAND=$(openssl rand -hex 2)
+          TAG="RC-${DATE}-${RAND}"
+
+          echo "rc_tag=$TAG" >> $GITHUB_OUTPUT
+          echo "✅ RC Tag generado: $TAG"
+
+          # Guardamos en un JSON para usar en otros jobs si hace falta
+          echo "{\"rc_tag\": \"$TAG\"}" > rc_tag.json
+
+      - name: Subir artifact con RC Tag
+        uses: actions/upload-artifact@v4
+        with:
+          name: rc-tag
+          path: rc_tag.json
+
+      - name: Crear Release en GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.set-tag.outputs.rc_tag }}
+          name: Release Candidate ${{ steps.set-tag.outputs.rc_tag }}
+          body: Release Candidate para CERT
+          overwrite_files: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
