@@ -1,0 +1,32 @@
+name: Run YouTube API Script Produccion
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "Tag RC aprobado para producción"
+        required: true
+
+  repository_dispatch:
+    types: [trigger-prod]
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Python script
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python get_channel_info.py
