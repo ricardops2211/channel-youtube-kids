@@ -44,7 +44,7 @@ jobs:
           name: Release Candidate ${{ steps.set-tag.outputs.rc_tag }}
           body: Release Candidate para CERT
           overwrite_files: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
