@@ -24,7 +24,7 @@ try:
     print("📽️ Ideas de guiones:\n", ideas)
 
 except RateLimitError:
-    print("❌ Te has quedado sin cuota de OpenAI. Revisa tu cuenta: https://platform.openai.com/account/usage")
+    print("❌ /account/usage")
 
 # Guardar en archivo
 with open("ideas_guiones.txt", "w", encoding="utf-8") as f:
